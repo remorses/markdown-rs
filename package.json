@@ -8,9 +8,7 @@
   "scripts": {
     "build:debug": "pnpm napi build --platform --manifest-path napi/Cargo.toml",
     "build": "pnpm run build:debug --release",
-    "npm-dirs": "pnpm napi create-npm-dirs --package-json-path package.json",
-    "pre-publish": "pnpm napi pre-publish --no-gh-release --tagstyle npm --package-json-path package.json --npm-dir npm && cp package.json napi/package.json && cp README.md napi/README.md",
-    "artifacts": "pnpm napi artifacts --npm-dir npm --build-output-dir napi"
+    "npm-dirs": "pnpm napi create-npm-dirs --package-json-path package.json"
   },
   "main": "index.js",
   "browser": "browser.js",

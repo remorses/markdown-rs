@@ -179,5 +179,5 @@ jobs:
 
           # Publish root package
           cp package.json napi/package.json
-          cp README.md napi/README.md
+          cp readme.md napi/readme.md
           npm publish napi/ --tag latest --provenance --access public
