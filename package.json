@@ -1,5 +1,5 @@
 {
-  "name": "@xmorse/markdown-rs",
+  "name": "@xmorse/markdownrs",
   "version": "0.0.0",
   "scripts": {
     "build:debug": "pnpm napi build --platform --manifest-path napi/Cargo.toml",
