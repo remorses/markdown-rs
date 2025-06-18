@@ -8,6 +8,14 @@
     "pre-publish": "pnpm napi pre-publish --no-gh-release --tagstyle npm --package-json-path package.json --npm-dir npm && cp package.json napi/package.json && cp README.md napi/README.md",
     "artifacts": "pnpm napi artifacts --npm-dir npm --build-output-dir napi"
   },
+  "main": "index.js",
+  "browser": "browser.js",
+  "files": [
+    "index.d.ts",
+    "index.js",
+    "browser.js",
+    "webcontainer-fallback.js"
+  ],
   "napi": {
     "binaryName": "markdown-rs",
     "packageName": "@xmorse/markdown-rs-binding",
