@@ -508,70 +508,20 @@ This is a paragraph.
 
 Another paragraph.`);
 
-    expect(sections).toMatchInlineSnapshot(`
+    expect(stripPositions(sections)).toMatchInlineSnapshot(`
       [
         {
-          "position": {
-            "end": {
-              "column": 14,
-              "line": 1,
-              "offset": 13,
-            },
-            "start": {
-              "column": 1,
-              "line": 1,
-              "offset": 0,
-            },
-          },
-          "raw": "# Hello World",
+          "depth": 1,
           "type": "heading",
         },
         {
-          "position": {
-            "end": {
-              "column": 21,
-              "line": 3,
-              "offset": 35,
-            },
-            "start": {
-              "column": 1,
-              "line": 3,
-              "offset": 15,
-            },
-          },
-          "raw": "This is a paragraph.",
           "type": "paragraph",
         },
         {
-          "position": {
-            "end": {
-              "column": 14,
-              "line": 5,
-              "offset": 50,
-            },
-            "start": {
-              "column": 1,
-              "line": 5,
-              "offset": 37,
-            },
-          },
-          "raw": "## Subheading",
+          "depth": 2,
           "type": "heading",
         },
         {
-          "position": {
-            "end": {
-              "column": 19,
-              "line": 7,
-              "offset": 70,
-            },
-            "start": {
-              "column": 1,
-              "line": 7,
-              "offset": 52,
-            },
-          },
-          "raw": "Another paragraph.",
           "type": "paragraph",
         },
       ]
@@ -585,22 +535,10 @@ Another paragraph.`);
 
   it("works with single element", () => {
     const sections = splitIntoSections("# Single Heading");
-    expect(sections).toMatchInlineSnapshot(`
+    expect(stripPositions(sections)).toMatchInlineSnapshot(`
       [
         {
-          "position": {
-            "end": {
-              "column": 17,
-              "line": 1,
-              "offset": 16,
-            },
-            "start": {
-              "column": 1,
-              "line": 1,
-              "offset": 0,
-            },
-          },
-          "raw": "# Single Heading",
+          "depth": 1,
           "type": "heading",
         },
       ]
@@ -622,91 +560,28 @@ const code = "block";
 \`\`\``;
 
     const sections = splitIntoSections(content);
-    expect(sections).toMatchInlineSnapshot(`
+    expect(stripPositions(sections)).toMatchInlineSnapshot(`
       [
         {
-          "position": {
-            "end": {
-              "column": 10,
-              "line": 1,
-              "offset": 9,
-            },
-            "start": {
-              "column": 1,
-              "line": 1,
-              "offset": 0,
-            },
-          },
-          "raw": "# Heading",
+          "depth": 1,
           "type": "heading",
         },
         {
-          "position": {
-            "end": {
-              "column": 30,
-              "line": 3,
-              "offset": 40,
-            },
-            "start": {
-              "column": 1,
-              "line": 3,
-              "offset": 11,
-            },
-          },
-          "raw": "Paragraph with **bold** text.",
           "type": "paragraph",
         },
         {
-          "position": {
-            "end": {
-              "column": 18,
-              "line": 5,
-              "offset": 59,
-            },
-            "start": {
-              "column": 1,
-              "line": 5,
-              "offset": 42,
-            },
-          },
-          "raw": "> Blockquote here",
           "type": "blockquote",
         },
         {
-          "position": {
-            "end": {
-              "column": 1,
-              "line": 9,
-              "offset": 89,
-            },
-            "start": {
-              "column": 1,
-              "line": 7,
-              "offset": 61,
-            },
-          },
-          "raw": "- List item 1
-      - List item 2
-      ",
+          "ordered": false,
+          "spread": false,
           "type": "list",
         },
         {
-          "position": {
-            "end": {
-              "column": 4,
-              "line": 12,
-              "offset": 140,
-            },
-            "start": {
-              "column": 1,
-              "line": 10,
-              "offset": 90,
-            },
-          },
-          "raw": "\`\`\`javascript metastring
-      const code = "block";
-      \`\`\`",
+          "lang": "javascript",
+          "meta": "metastring",
           "type": "code",
+          "value": "const code = "block";",
         },
       ]
     `);
@@ -724,56 +599,24 @@ const code = "block";
       { mdx: true },
     );
 
-    expect(sections).toMatchInlineSnapshot(`
+    expect(stripPositions(sections)).toMatchInlineSnapshot(`
       [
         {
-          "position": {
-            "end": {
-              "column": 26,
-              "line": 1,
-              "offset": 25,
-            },
-            "start": {
-              "column": 1,
-              "line": 1,
-              "offset": 0,
-            },
-          },
-          "raw": "import React from 'react'",
           "type": "paragraph",
         },
         {
-          "position": {
-            "end": {
-              "column": 15,
-              "line": 3,
-              "offset": 41,
-            },
-            "start": {
-              "column": 1,
-              "line": 3,
-              "offset": 27,
-            },
-          },
-          "raw": "# MDX Document",
+          "depth": 1,
           "type": "heading",
         },
         {
-          "position": {
-            "end": {
-              "column": 13,
-              "line": 7,
-              "offset": 90,
+          "attributes": [
+            {
+              "name": "prop",
+              "type": "mdxJsxAttribute",
+              "value": "value",
             },
-            "start": {
-              "column": 1,
-              "line": 5,
-              "offset": 43,
-            },
-          },
-          "raw": "<Component prop="value">
-        Content
-      </Component>",
+          ],
+          "name": "Component",
           "type": "mdxJsxFlowElement",
         },
       ]
@@ -793,54 +636,25 @@ const code = "block";
       },
     );
 
-    expect(sections).toMatchInlineSnapshot(`
+    expect(stripPositions(sections)).toMatchInlineSnapshot(`
       [
         {
-          "position": {
-            "end": {
-              "column": 16,
-              "line": 1,
-              "offset": 15,
-            },
-            "start": {
-              "column": 1,
-              "line": 1,
-              "offset": 0,
-            },
-          },
-          "raw": "# Hello {world}",
+          "depth": 1,
           "type": "heading",
         },
         {
-          "position": {
-            "end": {
-              "column": 13,
-              "line": 3,
-              "offset": 29,
-            },
-            "start": {
-              "column": 1,
-              "line": 3,
-              "offset": 17,
-            },
-          },
-          "raw": "{expression}",
+          "_markdownRsStops": [
+            [
+              0,
+              18,
+            ],
+          ],
           "type": "mdxFlowExpression",
+          "value": "expression",
         },
         {
-          "position": {
-            "end": {
-              "column": 14,
-              "line": 5,
-              "offset": 44,
-            },
-            "start": {
-              "column": 1,
-              "line": 5,
-              "offset": 31,
-            },
-          },
-          "raw": "<Component />",
+          "attributes": [],
+          "name": "Component",
           "type": "mdxJsxFlowElement",
         },
       ]

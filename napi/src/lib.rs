@@ -21,15 +21,7 @@ pub struct ParseOptions {
     pub frontmatter: Option<bool>,
 }
 
-#[napi(object)]
-pub struct Section {
-    /// Raw text content of the section
-    pub raw: String,
-    /// Type of the section (e.g., "heading", "paragraph", etc.)
-    pub r#type: String,
-    /// Position information
-    pub position: Option<Value>,
-}
+
 
 impl ParseOptions {
     fn to_rust_parse_options(&self) -> markdown::ParseOptions {
@@ -92,7 +84,7 @@ pub fn parse(input: String, options: Option<ParseOptions>) -> Result<Value> {
 }
 
 #[napi]
-pub fn split_into_sections(input: String, options: Option<ParseOptions>) -> Result<Vec<Section>> {
+pub fn split_into_sections(input: String, options: Option<ParseOptions>) -> Result<Vec<Value>> {
     let parse_options = match options {
         Some(opts) => opts.to_rust_parse_options(),
         None => markdown::ParseOptions::default(),
@@ -108,43 +100,12 @@ pub fn split_into_sections(input: String, options: Option<ParseOptions>) -> Resu
 
     if let Some(children) = ast_value.get("children").and_then(|c| c.as_array()) {
         for child in children {
-            let node_type = child
-                .get("type")
-                .and_then(|t| t.as_str())
-                .unwrap_or("unknown")
-                .to_string();
-
-            let position = child.get("position").cloned();
-
-            // Extract raw text from position
-            let raw = if let Some(pos) = &position {
-                if let (Some(start), Some(end)) = (
-                    pos.get("start")
-                        .and_then(|s| s.get("offset"))
-                        .and_then(|o| o.as_u64()),
-                    pos.get("end")
-                        .and_then(|e| e.get("offset"))
-                        .and_then(|o| o.as_u64()),
-                ) {
-                    let start_idx = start as usize;
-                    let end_idx = end as usize;
-                    if start_idx <= input.len() && end_idx <= input.len() && start_idx <= end_idx {
-                        input[start_idx..end_idx].to_string()
-                    } else {
-                        String::new()
-                    }
-                } else {
-                    String::new()
-                }
-            } else {
-                String::new()
-            };
-
-            sections.push(Section {
-                raw,
-                r#type: node_type,
-                position,
-            });
+            let mut node = child.clone();
+            // Remove children field if it exists
+            if let Some(obj) = node.as_object_mut() {
+                obj.remove("children");
+            }
+            sections.push(node);
         }
     }
 
