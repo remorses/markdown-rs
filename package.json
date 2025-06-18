@@ -2,7 +2,7 @@
   "name": "@xmorse/markdown-rs",
   "version": "0.0.0",
   "scripts": {
-    "build:debug": "napi build --platform --manifest-path napi/Cargo.toml",
+    "build:debug": "pnpm napi build --platform --manifest-path napi/Cargo.toml",
     "build": "pnpm run build:debug --release",
     "npm-dirs": "pnpm napi create-npm-dirs --package-json-path package.json",
     "pre-publish": "pnpm napi pre-publish --no-gh-release --tagstyle npm --package-json-path package.json --npm-dir npm && cp package.json napi/package.json && cp README.md napi/README.md",
