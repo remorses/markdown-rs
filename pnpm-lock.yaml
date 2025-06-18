@@ -24,6 +24,24 @@ importers:
         specifier: ^1.5.0
         version: 1.6.1
 
+  napi:
+    devDependencies:
+      '@emnapi/runtime':
+        specifier: ^1.4.3
+        version: 1.4.3
+      '@napi-rs/cli':
+        specifier: 3.0.0-alpha.89
+        version: 3.0.0-alpha.89(@emnapi/runtime@1.4.3)(emnapi@1.4.3)
+      '@napi-rs/wasm-runtime':
+        specifier: ^0.2.7
+        version: 0.2.11
+      emnapi:
+        specifier: ^1.4.3
+        version: 1.4.3
+      vitest:
+        specifier: ^1.5.0
+        version: 1.6.1
+
 packages:
 
   '@emnapi/core@1.4.3':
