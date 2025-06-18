@@ -231,12 +231,15 @@ describe("parse", () => {
 
   it("handles broken jsx in mdx without panic", () => {
     const error = catchErrorValue(() =>
-      parse(`
+      parse(
+        `
 paragraph
 
 <Callout type="info">
 
-    `, { mdx: true }),
+    `,
+        { mdx: true },
+      ),
     );
     expect(error).toMatchInlineSnapshot(
       `[Error: Message { place: Some(Point(6:5 (39))), reason: "Expected a closing tag for \`<Callout>\` (4:1)", rule_id: "end-tag-mismatch", source: "markdown-rs" }]`,
@@ -244,7 +247,8 @@ paragraph
   });
 
   it("returns mdast", () => {
-    const ast = parse(`
+    const ast = parse(
+      `
 import something from 'package'
 export const x = 9
 
@@ -260,7 +264,9 @@ here is some mdx {expression}
 this is a callout
 
 </Callout>
-    `, { mdx: true });
+    `,
+      { mdx: true },
+    );
     expect(stripPositions(ast)).toMatchInlineSnapshot(`
       {
         "children": [
@@ -364,7 +370,7 @@ This is a paragraph.
 ## Subheading
 
 Another paragraph.`);
-    
+
     expect(sections).toMatchInlineSnapshot(`
       [
         {
@@ -570,14 +576,17 @@ const code = "block";
   });
 
   it("works with MDX content", () => {
-    const sections = splitIntoSections(`import React from 'react'
+    const sections = splitIntoSections(
+      `import React from 'react'
 
 # MDX Document
 
 <Component prop="value">
   Content
-</Component>`, { mdx: true });
-    
+</Component>`,
+      { mdx: true },
+    );
+
     expect(sections).toMatchInlineSnapshot(`
       [
         {
@@ -635,15 +644,18 @@ const code = "block";
   });
 
   it("works with MDX and expression parsing enabled", () => {
-    const sections = splitIntoSections(`# Hello {world}
+    const sections = splitIntoSections(
+      `# Hello {world}
 
 {expression}
 
-<Component />`, {
-      mdx: true,
-      mdxExpressionParse: true
-    });
-    
+<Component />`,
+      {
+        mdx: true,
+        mdxExpressionParse: true,
+      },
+    );
+
     expect(sections).toMatchInlineSnapshot(`
       [
         {
@@ -698,10 +710,33 @@ const code = "block";
     `);
   });
 
+  it("extracts frontmatter section", () => {
+    const content = `---
+title: Hello World
+tags:
+  - test
+  - doc
+---
+
+# Heading
+
+Content goes here.
+`;
+    const sections = splitIntoSections(content, { mdx: true,  });
+
+    expect(sections[0].type).toBe("yaml");
+    expect(sections[0].raw).toBe(`---
+title: Hello World
+tags:
+  - test
+  - doc
+---`);
+  });
+
   it("preserves exact raw text with complex formatting", () => {
     const content = "# Title\n\nParagraph with *emphasis* and `code`.";
     const sections = splitIntoSections(content);
-    
+
     expect(sections[0].raw).toBe("# Title");
     expect(sections[1].raw).toBe("Paragraph with *emphasis* and `code`.");
     expect(sections[0].type).toBe("heading");
@@ -711,9 +746,9 @@ const code = "block";
   it("accepts parse options", () => {
     const sections = splitIntoSections("# Title\n\nSome content", {
       gfmStrikethroughSingleTilde: false,
-      mathTextSingleDollar: true
+      mathTextSingleDollar: true,
     });
-    
+
     expect(sections).toHaveLength(2);
     expect(sections[0].type).toBe("heading");
     expect(sections[1].type).toBe("paragraph");
