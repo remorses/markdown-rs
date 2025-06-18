@@ -56,3 +56,4 @@ const {
 export default __napiModule.exports
 export const parse = __napiModule.exports.parse
 export const parseMdx = __napiModule.exports.parseMdx
+export const toHtml = __napiModule.exports.toHtml

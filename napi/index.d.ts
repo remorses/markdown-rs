@@ -3,3 +3,5 @@
 export declare function parse(input: string): any
 
 export declare function parseMdx(mdx: string): any
+
+export declare function toHtml(mdx: string): any

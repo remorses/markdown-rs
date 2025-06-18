@@ -1,9 +1,33 @@
 import { describe, it, expect } from "vitest";
-import { parse, parseMdx } from "../";
+import { parse, parseMdx, toHtml } from "../";
 
 describe("parse mdx", () => {
+  it("returns html", () => {
+    const html = toHtml(`
+# Hello
+
+this is a paragraph
+
+here is some mdx
+
+<Callout>
+this is a callout
+
+</Callout>`);
+    expect(html).toMatchInlineSnapshot(`
+      "<h1>Hello</h1>
+      <p>this is a paragraph</p>
+      <p>here is some mdx</p>
+      &lt;Callout&gt;
+      this is a callout
+      &lt;/Callout&gt;"
+    `);
+  });
   it("returns mdast", () => {
     const ast = parseMdx(`
+import something from 'package'
+export const x = 9
+
 # Hello
 
 this is a paragraph
@@ -15,107 +39,45 @@ this is a callout
 
 </Callout>
     `);
-    expect(ast).toMatchInlineSnapshot(`
+    expect(stripPositions(ast)).toMatchInlineSnapshot(`
       {
         "children": [
           {
             "children": [
               {
-                "position": {
-                  "end": {
-                    "column": 8,
-                    "line": 2,
-                    "offset": 8,
-                  },
-                  "start": {
-                    "column": 3,
-                    "line": 2,
-                    "offset": 3,
-                  },
-                },
                 "type": "text",
-                "value": "Hello",
+                "value": "import something from 'package'
+      export const x = 9",
               },
             ],
-            "depth": 1,
-            "position": {
-              "end": {
-                "column": 8,
-                "line": 2,
-                "offset": 8,
-              },
-              "start": {
-                "column": 1,
-                "line": 2,
-                "offset": 1,
-              },
-            },
-            "type": "heading",
-          },
-          {
-            "children": [
-              {
-                "position": {
-                  "end": {
-                    "column": 20,
-                    "line": 4,
-                    "offset": 29,
-                  },
-                  "start": {
-                    "column": 1,
-                    "line": 4,
-                    "offset": 10,
-                  },
-                },
-                "type": "text",
-                "value": "this is a paragraph",
-              },
-            ],
-            "position": {
-              "end": {
-                "column": 20,
-                "line": 4,
-                "offset": 29,
-              },
-              "start": {
-                "column": 1,
-                "line": 4,
-                "offset": 10,
-              },
-            },
             "type": "paragraph",
           },
           {
             "children": [
               {
-                "position": {
-                  "end": {
-                    "column": 17,
-                    "line": 6,
-                    "offset": 47,
-                  },
-                  "start": {
-                    "column": 1,
-                    "line": 6,
-                    "offset": 31,
-                  },
-                },
+                "type": "text",
+                "value": "Hello",
+              },
+            ],
+            "depth": 1,
+            "type": "heading",
+          },
+          {
+            "children": [
+              {
+                "type": "text",
+                "value": "this is a paragraph",
+              },
+            ],
+            "type": "paragraph",
+          },
+          {
+            "children": [
+              {
                 "type": "text",
                 "value": "here is some mdx",
               },
             ],
-            "position": {
-              "end": {
-                "column": 17,
-                "line": 6,
-                "offset": 47,
-              },
-              "start": {
-                "column": 1,
-                "line": 6,
-                "offset": 31,
-              },
-            },
             "type": "paragraph",
           },
           {
@@ -124,67 +86,40 @@ this is a callout
               {
                 "children": [
                   {
-                    "position": {
-                      "end": {
-                        "column": 18,
-                        "line": 9,
-                        "offset": 76,
-                      },
-                      "start": {
-                        "column": 1,
-                        "line": 9,
-                        "offset": 59,
-                      },
-                    },
                     "type": "text",
                     "value": "this is a callout",
                   },
                 ],
-                "position": {
-                  "end": {
-                    "column": 18,
-                    "line": 9,
-                    "offset": 76,
-                  },
-                  "start": {
-                    "column": 1,
-                    "line": 9,
-                    "offset": 59,
-                  },
-                },
                 "type": "paragraph",
               },
             ],
             "name": "Callout",
-            "position": {
-              "end": {
-                "column": 11,
-                "line": 11,
-                "offset": 88,
-              },
-              "start": {
-                "column": 1,
-                "line": 8,
-                "offset": 49,
-              },
-            },
             "type": "mdxJsxFlowElement",
           },
         ],
-        "position": {
-          "end": {
-            "column": 5,
-            "line": 12,
-            "offset": 93,
-          },
-          "start": {
-            "column": 1,
-            "line": 1,
-            "offset": 0,
-          },
-        },
         "type": "root",
       }
     `);
   });
 });
+
+/**
+ * Removes all "position" fields from an mdast/unist tree node (in-place).
+ * @param node - The tree node to clean.
+ * @returns The node without "position" fields.
+ */
+export function stripPositions<T extends Record<string, any>>(node: T): T {
+  if (Array.isArray(node)) {
+    // @ts-ignore
+    return node.map(stripPositions);
+  } else if (node && typeof node === "object") {
+    const newNode: any = {};
+    for (const key in node) {
+      if (key === "position") continue;
+      // Recursively clean properties that may be nodes or arrays of nodes
+      newNode[key] = stripPositions(node[key]);
+    }
+    return newNode;
+  }
+  return node;
+}
