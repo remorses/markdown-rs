@@ -120,6 +120,7 @@ jobs:
         with:
           node-version: 22
       - uses: pnpm/action-setup@v4
+      - run: pnpm i -g @napi-rs/cli@alpha
 
       - run: rustup target add ${{ matrix.target }}
 
