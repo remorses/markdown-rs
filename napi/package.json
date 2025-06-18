@@ -1,6 +1,9 @@
 {
   "name": "@xmorse/markdown-rs",
-  "version": "0.0.3",
+  "description": "Fast markdown and mdx parser written in Rust",
+  "version": "0.0.4",
+  "main": "index.js",
+  "browser": "browser.js",
   "scripts": {
     "build:debug": "pnpm napi build --platform --manifest-path Cargo.toml",
     "test": "pnpm vitest",
