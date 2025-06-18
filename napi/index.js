@@ -73,24 +73,24 @@ function requireNative() {
   } else if (process.platform === 'android') {
     if (process.arch === 'arm64') {
       try {
-        return require('./markdown-rs.android-arm64.node')
+        return require('./markdownrs.android-arm64.node')
       } catch (e) {
         loadErrors.push(e)
       }
       try {
-        return require('markdown-rs-binding-android-arm64')
+        return require('@xmorse/markdownrs-android-arm64')
       } catch (e) {
         loadErrors.push(e)
       }
 
     } else if (process.arch === 'arm') {
       try {
-        return require('./markdown-rs.android-arm-eabi.node')
+        return require('./markdownrs.android-arm-eabi.node')
       } catch (e) {
         loadErrors.push(e)
       }
       try {
-        return require('markdown-rs-binding-android-arm-eabi')
+        return require('@xmorse/markdownrs-android-arm-eabi')
       } catch (e) {
         loadErrors.push(e)
       }
@@ -101,36 +101,36 @@ function requireNative() {
   } else if (process.platform === 'win32') {
     if (process.arch === 'x64') {
       try {
-        return require('./markdown-rs.win32-x64-msvc.node')
+        return require('./markdownrs.win32-x64-msvc.node')
       } catch (e) {
         loadErrors.push(e)
       }
       try {
-        return require('markdown-rs-binding-win32-x64-msvc')
+        return require('@xmorse/markdownrs-win32-x64-msvc')
       } catch (e) {
         loadErrors.push(e)
       }
 
     } else if (process.arch === 'ia32') {
       try {
-        return require('./markdown-rs.win32-ia32-msvc.node')
+        return require('./markdownrs.win32-ia32-msvc.node')
       } catch (e) {
         loadErrors.push(e)
       }
       try {
-        return require('markdown-rs-binding-win32-ia32-msvc')
+        return require('@xmorse/markdownrs-win32-ia32-msvc')
       } catch (e) {
         loadErrors.push(e)
       }
 
     } else if (process.arch === 'arm64') {
       try {
-        return require('./markdown-rs.win32-arm64-msvc.node')
+        return require('./markdownrs.win32-arm64-msvc.node')
       } catch (e) {
         loadErrors.push(e)
       }
       try {
-        return require('markdown-rs-binding-win32-arm64-msvc')
+        return require('@xmorse/markdownrs-win32-arm64-msvc')
       } catch (e) {
         loadErrors.push(e)
       }
@@ -140,36 +140,36 @@ function requireNative() {
     }
   } else if (process.platform === 'darwin') {
     try {
-        return require('./markdown-rs.darwin-universal.node')
+        return require('./markdownrs.darwin-universal.node')
       } catch (e) {
         loadErrors.push(e)
       }
       try {
-        return require('markdown-rs-binding-darwin-universal')
+        return require('@xmorse/markdownrs-darwin-universal')
       } catch (e) {
         loadErrors.push(e)
       }
 
     if (process.arch === 'x64') {
       try {
-        return require('./markdown-rs.darwin-x64.node')
+        return require('./markdownrs.darwin-x64.node')
       } catch (e) {
         loadErrors.push(e)
       }
       try {
-        return require('markdown-rs-binding-darwin-x64')
+        return require('@xmorse/markdownrs-darwin-x64')
       } catch (e) {
         loadErrors.push(e)
       }
 
     } else if (process.arch === 'arm64') {
       try {
-        return require('./markdown-rs.darwin-arm64.node')
+        return require('./markdownrs.darwin-arm64.node')
       } catch (e) {
         loadErrors.push(e)
       }
       try {
-        return require('markdown-rs-binding-darwin-arm64')
+        return require('@xmorse/markdownrs-darwin-arm64')
       } catch (e) {
         loadErrors.push(e)
       }
@@ -180,24 +180,24 @@ function requireNative() {
   } else if (process.platform === 'freebsd') {
     if (process.arch === 'x64') {
       try {
-        return require('./markdown-rs.freebsd-x64.node')
+        return require('./markdownrs.freebsd-x64.node')
       } catch (e) {
         loadErrors.push(e)
       }
       try {
-        return require('markdown-rs-binding-freebsd-x64')
+        return require('@xmorse/markdownrs-freebsd-x64')
       } catch (e) {
         loadErrors.push(e)
       }
 
     } else if (process.arch === 'arm64') {
       try {
-        return require('./markdown-rs.freebsd-arm64.node')
+        return require('./markdownrs.freebsd-arm64.node')
       } catch (e) {
         loadErrors.push(e)
       }
       try {
-        return require('markdown-rs-binding-freebsd-arm64')
+        return require('@xmorse/markdownrs-freebsd-arm64')
       } catch (e) {
         loadErrors.push(e)
       }
@@ -209,24 +209,24 @@ function requireNative() {
     if (process.arch === 'x64') {
       if (isMusl()) {
         try {
-        return require('./markdown-rs.linux-x64-musl.node')
+        return require('./markdownrs.linux-x64-musl.node')
       } catch (e) {
         loadErrors.push(e)
       }
       try {
-        return require('markdown-rs-binding-linux-x64-musl')
+        return require('@xmorse/markdownrs-linux-x64-musl')
       } catch (e) {
         loadErrors.push(e)
       }
 
       } else {
         try {
-        return require('./markdown-rs.linux-x64-gnu.node')
+        return require('./markdownrs.linux-x64-gnu.node')
       } catch (e) {
         loadErrors.push(e)
       }
       try {
-        return require('markdown-rs-binding-linux-x64-gnu')
+        return require('@xmorse/markdownrs-linux-x64-gnu')
       } catch (e) {
         loadErrors.push(e)
       }
@@ -235,24 +235,24 @@ function requireNative() {
     } else if (process.arch === 'arm64') {
       if (isMusl()) {
         try {
-        return require('./markdown-rs.linux-arm64-musl.node')
+        return require('./markdownrs.linux-arm64-musl.node')
       } catch (e) {
         loadErrors.push(e)
       }
       try {
-        return require('markdown-rs-binding-linux-arm64-musl')
+        return require('@xmorse/markdownrs-linux-arm64-musl')
       } catch (e) {
         loadErrors.push(e)
       }
 
       } else {
         try {
-        return require('./markdown-rs.linux-arm64-gnu.node')
+        return require('./markdownrs.linux-arm64-gnu.node')
       } catch (e) {
         loadErrors.push(e)
       }
       try {
-        return require('markdown-rs-binding-linux-arm64-gnu')
+        return require('@xmorse/markdownrs-linux-arm64-gnu')
       } catch (e) {
         loadErrors.push(e)
       }
@@ -261,24 +261,24 @@ function requireNative() {
     } else if (process.arch === 'arm') {
       if (isMusl()) {
         try {
-        return require('./markdown-rs.linux-arm-musleabihf.node')
+        return require('./markdownrs.linux-arm-musleabihf.node')
       } catch (e) {
         loadErrors.push(e)
       }
       try {
-        return require('markdown-rs-binding-linux-arm-musleabihf')
+        return require('@xmorse/markdownrs-linux-arm-musleabihf')
       } catch (e) {
         loadErrors.push(e)
       }
 
       } else {
         try {
-        return require('./markdown-rs.linux-arm-gnueabihf.node')
+        return require('./markdownrs.linux-arm-gnueabihf.node')
       } catch (e) {
         loadErrors.push(e)
       }
       try {
-        return require('markdown-rs-binding-linux-arm-gnueabihf')
+        return require('@xmorse/markdownrs-linux-arm-gnueabihf')
       } catch (e) {
         loadErrors.push(e)
       }
@@ -287,24 +287,24 @@ function requireNative() {
     } else if (process.arch === 'riscv64') {
       if (isMusl()) {
         try {
-        return require('./markdown-rs.linux-riscv64-musl.node')
+        return require('./markdownrs.linux-riscv64-musl.node')
       } catch (e) {
         loadErrors.push(e)
       }
       try {
-        return require('markdown-rs-binding-linux-riscv64-musl')
+        return require('@xmorse/markdownrs-linux-riscv64-musl')
       } catch (e) {
         loadErrors.push(e)
       }
 
       } else {
         try {
-        return require('./markdown-rs.linux-riscv64-gnu.node')
+        return require('./markdownrs.linux-riscv64-gnu.node')
       } catch (e) {
         loadErrors.push(e)
       }
       try {
-        return require('markdown-rs-binding-linux-riscv64-gnu')
+        return require('@xmorse/markdownrs-linux-riscv64-gnu')
       } catch (e) {
         loadErrors.push(e)
       }
@@ -312,24 +312,24 @@ function requireNative() {
       }
     } else if (process.arch === 'ppc64') {
       try {
-        return require('./markdown-rs.linux-ppc64-gnu.node')
+        return require('./markdownrs.linux-ppc64-gnu.node')
       } catch (e) {
         loadErrors.push(e)
       }
       try {
-        return require('markdown-rs-binding-linux-ppc64-gnu')
+        return require('@xmorse/markdownrs-linux-ppc64-gnu')
       } catch (e) {
         loadErrors.push(e)
       }
 
     } else if (process.arch === 's390x') {
       try {
-        return require('./markdown-rs.linux-s390x-gnu.node')
+        return require('./markdownrs.linux-s390x-gnu.node')
       } catch (e) {
         loadErrors.push(e)
       }
       try {
-        return require('markdown-rs-binding-linux-s390x-gnu')
+        return require('@xmorse/markdownrs-linux-s390x-gnu')
       } catch (e) {
         loadErrors.push(e)
       }
@@ -346,7 +346,7 @@ nativeBinding = requireNative()
 
 if (!nativeBinding || process.env.NAPI_RS_FORCE_WASI) {
   try {
-    nativeBinding = require('./markdown-rs.wasi.cjs')
+    nativeBinding = require('./markdownrs.wasi.cjs')
   } catch (err) {
     if (process.env.NAPI_RS_FORCE_WASI) {
       loadErrors.push(err)
@@ -354,7 +354,7 @@ if (!nativeBinding || process.env.NAPI_RS_FORCE_WASI) {
   }
   if (!nativeBinding) {
     try {
-      nativeBinding = require('markdown-rs-binding-wasm32-wasi')
+      nativeBinding = require('@xmorse/markdownrs-wasm32-wasi')
     } catch (err) {
       if (process.env.NAPI_RS_FORCE_WASI) {
         loadErrors.push(err)
@@ -365,12 +365,11 @@ if (!nativeBinding || process.env.NAPI_RS_FORCE_WASI) {
 
 if (!nativeBinding) {
   if (loadErrors.length > 0) {
-    throw new Error(
-      `Cannot find native binding. ` +
-        `npm has a bug related to optional dependencies (https://github.com/npm/cli/issues/4828). ` +
-        'Please try `npm i` again after removing both package-lock.json and node_modules directory.',
-      { cause: loadErrors }
-    )
+    // TODO Link to documentation with potential fixes
+    //  - The package owner could build/publish bindings for this arch
+    //  - The user may need to bundle the correct files
+    //  - The user may need to re-install node_modules to get new packages
+    throw new Error('Failed to load native binding', { cause: loadErrors })
   }
   throw new Error(`Failed to load native binding`)
 }

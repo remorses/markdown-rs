@@ -1,1 +1,1 @@
-export * from 'markdown-rs-binding-wasm32-wasi'
+export * from '@xmorse/markdownrs-wasm32-wasi'
