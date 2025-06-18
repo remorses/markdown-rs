@@ -1,48 +1,9 @@
 {
-  "name": "@xmorse/markdownrs",
-  "version": "0.0.1",
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/",
-    "access": "public"
-  },
+  "name": "root",
   "scripts": {
     "build:debug": "pnpm napi build --platform --manifest-path napi/Cargo.toml",
     "build": "pnpm run build:debug --release",
     "npm-dirs": "pnpm napi create-npm-dirs --package-json-path package.json"
-  },
-  "main": "index.js",
-  "browser": "browser.js",
-  "files": [
-    "index.d.ts",
-    "index.js",
-    "browser.js",
-    "webcontainer-fallback.js"
-  ],
-  "napi": {
-    "binaryName": "markdownrs",
-    "packageName": "@xmorse/markdownrs",
-    "targets": [
-      "x86_64-unknown-linux-gnu",
-      "x86_64-unknown-linux-musl",
-      "x86_64-unknown-freebsd",
-      "aarch64-unknown-linux-gnu",
-      "aarch64-unknown-linux-musl",
-      "armv7-unknown-linux-gnueabihf",
-      "s390x-unknown-linux-gnu",
-      "riscv64gc-unknown-linux-gnu",
-      "x86_64-apple-darwin",
-      "aarch64-apple-darwin",
-      "wasm32-wasip1-threads"
-    ],
-    "wasm": {
-      "initialMemory": 16384
-    }
-  },
-  "devDependencies": {
-    "@napi-rs/cli": "3.0.0-alpha.88",
-    "@napi-rs/wasm-runtime": "^0.2.7",
-    "emnapi": "^1.4.3",
-    "vitest": "^1.5.0"
   },
   "packageManager": "pnpm@10.12.1"
 }

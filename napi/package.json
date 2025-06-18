@@ -2,9 +2,9 @@
   "name": "@xmorse/markdown-rs",
   "version": "0.0.0",
   "scripts": {
-    "build:debug": "pnpm napi build --platform --manifest-path napi/Cargo.toml",
-    "build": "pnpm run build:debug --release",
-    "npm-dirs": "pnpm napi create-npm-dirs --package-json-path package.json"
+    "build:debug": "pnpm napi build --platform --manifest-path Cargo.toml",
+    "test": "pnpm vitest",
+    "build": "pnpm run build:debug --release"
   },
   "napi": {
     "binaryName": "markdown-rs",

@@ -6,20 +6,7 @@ settings:
 
 importers:
 
-  .:
-    devDependencies:
-      '@napi-rs/cli':
-        specifier: 3.0.0-alpha.88
-        version: 3.0.0-alpha.88(@emnapi/runtime@1.4.3)(emnapi@1.4.3)
-      '@napi-rs/wasm-runtime':
-        specifier: ^0.2.7
-        version: 0.2.11
-      emnapi:
-        specifier: ^1.4.3
-        version: 1.4.3
-      vitest:
-        specifier: ^1.5.0
-        version: 1.6.1
+  .: {}
 
   napi:
     devDependencies:
@@ -315,19 +302,6 @@ packages:
 
   '@jridgewell/sourcemap-codec@1.5.0':
     resolution: {integrity: sha512-gv3ZRaISU3fjPAgNsriBRqGWQL6quFx04YMPW/zD8XMLsU32mhCCbfbO6KZFLjvYpCZ8zyDEgqsgf+PwPaM7GQ==}
-
-  '@napi-rs/cli@3.0.0-alpha.88':
-    resolution: {integrity: sha512-tAzLbGY+7JhRwAfeykv/Rl44mq3rufJzV5MuVQ2Nr+bMq6fr8winy0kV/myACDtYiXYx5Ax+XMHBKiLU2Xw5Ng==}
-    engines: {node: '>= 16'}
-    hasBin: true
-    peerDependencies:
-      '@emnapi/runtime': ^1.1.0
-      emnapi: ^1.1.0
-    peerDependenciesMeta:
-      '@emnapi/runtime':
-        optional: true
-      emnapi:
-        optional: true
 
   '@napi-rs/cli@3.0.0-alpha.89':
     resolution: {integrity: sha512-Xi/B/unPVZJx12Qmj9+Z3+vfgmGdhp2tjtvH1VFjC6VrToh/i1fOBSv77j9WhYYWayFGhIit7nLcxQWxigXr8A==}
@@ -1432,34 +1406,6 @@ snapshots:
       '@sinclair/typebox': 0.27.8
 
   '@jridgewell/sourcemap-codec@1.5.0': {}
-
-  '@napi-rs/cli@3.0.0-alpha.88(@emnapi/runtime@1.4.3)(emnapi@1.4.3)':
-    dependencies:
-      '@inquirer/prompts': 7.5.3
-      '@napi-rs/cross-toolchain': 0.0.19
-      '@napi-rs/wasm-tools': 0.0.3
-      '@octokit/rest': 22.0.0
-      clipanion: 4.0.0-rc.4(typanion@3.14.0)
-      colorette: 2.0.20
-      debug: 4.4.1
-      js-yaml: 4.1.0
-      lodash-es: 4.17.21
-      semver: 7.7.2
-      toml: 3.0.0
-      typanion: 3.14.0
-      wasm-sjlj: 1.0.6
-    optionalDependencies:
-      '@emnapi/runtime': 1.4.3
-      emnapi: 1.4.3
-    transitivePeerDependencies:
-      - '@napi-rs/cross-toolchain-arm64-target-aarch64'
-      - '@napi-rs/cross-toolchain-arm64-target-armv7'
-      - '@napi-rs/cross-toolchain-arm64-target-x86_64'
-      - '@napi-rs/cross-toolchain-x64-target-aarch64'
-      - '@napi-rs/cross-toolchain-x64-target-armv7'
-      - '@napi-rs/cross-toolchain-x64-target-x86_64'
-      - '@types/node'
-      - supports-color
 
   '@napi-rs/cli@3.0.0-alpha.89(@emnapi/runtime@1.4.3)(emnapi@1.4.3)':
     dependencies:
