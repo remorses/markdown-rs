@@ -86,5 +86,3 @@ const { instance: __napiInstance, module: __wasiModule, napiModule: __napiModule
 })
 module.exports = __napiModule.exports
 module.exports.parse = __napiModule.exports.parse
-module.exports.parseMdx = __napiModule.exports.parseMdx
-module.exports.toHtml = __napiModule.exports.toHtml

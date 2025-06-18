@@ -2,9 +2,9 @@
 /* eslint-disable */
 export declare function parse(input: string, options?: ParseOptions | undefined | null): any
 
-export declare function parseMdx(mdx: string, options?: ParseOptions | undefined | null): any
-
 export interface ParseOptions {
+  /** Whether to parse as MDX */
+  mdx?: boolean
   /** Whether to support GFM strikethrough with a single tilde */
   gfmStrikethroughSingleTilde?: boolean
   /** Whether to support math (text) with a single dollar */
@@ -14,5 +14,3 @@ export interface ParseOptions {
   /** Whether to enable basic MDX ESM parsing */
   mdxEsmParse?: boolean
 }
-
-export declare function toHtml(mdx: string): any

@@ -133,6 +133,7 @@ jobs:
       - name: Build
         run: ${{ matrix.build }}
         shell: bash
+        working-directory: napi
         env:
           CC: clang # for mimalloc
 
@@ -165,9 +166,9 @@ jobs:
         with:
           path: artifacts
 
-      - run: pnpm napi create-npm-dirs --package-json-path package.json
+      - run: pnpm napi create-npm-dirs --package-json-path napi/package.json
 
-      - run: pnpm napi artifacts --package-json-path package.json --npm-dir npm --build-output-dir napi
+      - run: pnpm napi artifacts --package-json-path napi/package.json --npm-dir npm --build-output-dir napi
 
       - name: Publish npm packages as latest
         env:
@@ -175,9 +176,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-          pnpm napi pre-publish --no-gh-release --tagstyle npm --package-json-path package.json --npm-dir npm
+          pnpm napi pre-publish --no-gh-release --tagstyle npm --package-json-path napi/package.json --npm-dir npm
 
           # Publish root package
-          cp package.json napi/package.json
-          cp readme.md napi/readme.md
           npm publish napi/ --tag latest --provenance --access public

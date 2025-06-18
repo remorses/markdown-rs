@@ -5,6 +5,8 @@ use markdown::{MdxExpressionKind, MdxSignal};
 
 #[napi(object)]
 pub struct ParseOptions {
+    /// Whether to parse as MDX
+    pub mdx: Option<bool>,
     /// Whether to support GFM strikethrough with a single tilde
     pub gfm_strikethrough_single_tilde: Option<bool>,
     /// Whether to support math (text) with a single dollar
@@ -43,35 +45,35 @@ impl ParseOptions {
 
 #[napi]
 pub fn parse(input: String, options: Option<ParseOptions>) -> Result<Value> {
-    let parse_options = match options {
-        Some(opts) => opts.to_rust_parse_options(),
+    let mut parse_options = match &options {
+        Some(opts) => {
+            if opts.mdx.unwrap_or(false) {
+                markdown::ParseOptions {
+                    constructs: markdown::Constructs::mdx(),
+                    ..Default::default()
+                }
+            } else {
+                markdown::ParseOptions::default()
+            }
+        }
         None => markdown::ParseOptions::default(),
     };
+
+    // Override with user-provided options if available
+    if let Some(opts) = options {
+        let user_options = opts.to_rust_parse_options();
+        parse_options.gfm_strikethrough_single_tilde = user_options.gfm_strikethrough_single_tilde;
+        parse_options.math_text_single_dollar = user_options.math_text_single_dollar;
+        parse_options.mdx_expression_parse = user_options.mdx_expression_parse;
+        parse_options.mdx_esm_parse = user_options.mdx_esm_parse;
+    }
 
     let tree = markdown::to_mdast(&input, &parse_options)
         .map_err(|e| Error::from_reason(format!("{:?}", e)))?;
     serde_json::to_value(&tree).map_err(|e| Error::from_reason(e.to_string()))
 }
 
-#[napi]
-pub fn parse_mdx(mdx: String, options: Option<ParseOptions>) -> Result<Value> {
-    let mut mdx_options = markdown::ParseOptions {
-        constructs: markdown::Constructs::mdx(),
-        ..Default::default()
-    };
 
-    // Override with user-provided options if available
-    if let Some(opts) = options {
-        let user_options = opts.to_rust_parse_options();
-        mdx_options.gfm_strikethrough_single_tilde = user_options.gfm_strikethrough_single_tilde;
-        mdx_options.math_text_single_dollar = user_options.math_text_single_dollar;
-        mdx_options.mdx_expression_parse = user_options.mdx_expression_parse;
-        mdx_options.mdx_esm_parse = user_options.mdx_esm_parse;
-    }
-
-    let ast = markdown::to_mdast(&mdx, &mdx_options).map_err(|e| Error::from_reason(format!("{:?}", e)))?;
-    serde_json::to_value(&ast).map_err(|e| Error::from_reason(e.to_string()))
-}
 
 // #[napi]
 // pub fn to_html(mdx: String) -> Value {

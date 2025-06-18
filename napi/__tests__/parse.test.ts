@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { parse, parseMdx } from "../";
+import { parse } from "../";
 
-describe("parse mdx", () => {
+describe("parse", () => {
   it("parse accepts options parameter", () => {
     const ast = parse("# Hello ~world~", {
       gfmStrikethroughSingleTilde: true,
@@ -25,8 +25,9 @@ describe("parse mdx", () => {
     `);
   });
 
-  it("parse_mdx accepts options parameter", () => {
-    const ast = parseMdx("# Hello {expression}", {
+  it("parse with mdx option accepts options parameter", () => {
+    const ast = parse("# Hello {expression}", {
+      mdx: true,
       mdxExpressionParse: true,
       gfmStrikethroughSingleTilde: false,
     });
@@ -80,8 +81,8 @@ describe("parse mdx", () => {
     `);
   });
 
-  it("parse_mdx works without options parameter", () => {
-    const ast = parseMdx("# Hello {expression}");
+  it("parse with mdx option works without other options", () => {
+    const ast = parse("# Hello {expression}", { mdx: true });
     expect(stripPositions(ast)).toMatchInlineSnapshot(`
       {
         "children": [
@@ -193,8 +194,9 @@ describe("parse mdx", () => {
     `);
   });
 
-  it("mdx options work in parseMdx", () => {
-    const ast = parseMdx("import foo from 'bar'\n\n{expression}", {
+  it("mdx options work with parse function", () => {
+    const ast = parse("import foo from 'bar'\n\n{expression}", {
+      mdx: true,
       mdxEsmParse: true,
       mdxExpressionParse: true,
     });
@@ -230,19 +232,19 @@ describe("parse mdx", () => {
 
   it("handles broken jsx in mdx without panic", () => {
     const error = catchErrorValue(() =>
-      parseMdx(`
+      parse(`
 paragraph
 
 <Callout type="info">
 
-    `),
+    `, { mdx: true }),
     );
     expect(error).toMatchInlineSnapshot(
       `[Error: Message { place: Some(Point(6:5 (39))), reason: "Expected a closing tag for \`<Callout>\` (4:1)", rule_id: "end-tag-mismatch", source: "markdown-rs" }]`,
     );
   });
   it("returns mdast", () => {
-    const ast = parseMdx(`
+    const ast = parse(`
 import something from 'package'
 export const x = 9
 
@@ -258,7 +260,7 @@ here is some mdx {expression}
 this is a callout
 
 </Callout>
-    `);
+    `, { mdx: true });
     expect(stripPositions(ast)).toMatchInlineSnapshot(`
       {
         "children": [
