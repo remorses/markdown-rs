@@ -6,6 +6,9 @@
     "test": "pnpm vitest",
     "build": "pnpm run build:debug --release"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "napi": {
     "binaryName": "markdown-rs",
     "packageName": "@xmorse/markdown-rs-binding",
