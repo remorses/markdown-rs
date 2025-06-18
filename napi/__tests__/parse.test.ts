@@ -25,6 +25,27 @@ describe("parse", () => {
     `);
   });
 
+  it("parse handles level 2 heading", () => {
+    const ast = parse("## My Subheading");
+    expect(stripPositions(ast)).toMatchInlineSnapshot(`
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "type": "text",
+                "value": "My Subheading",
+              },
+            ],
+            "depth": 2,
+            "type": "heading",
+          },
+        ],
+        "type": "root",
+      }
+    `);
+  });
+
   it("parse code block with metastring", () => {
     const ast = parse("```js metastring\nconsole.log('hello world');\n```");
     expect(stripPositions(ast)).toMatchInlineSnapshot(`
