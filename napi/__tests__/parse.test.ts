@@ -25,6 +25,23 @@ describe("parse", () => {
     `);
   });
 
+  it("parse code block with metastring", () => {
+    const ast = parse("```js metastring\nconsole.log('hello world');\n```");
+    expect(stripPositions(ast)).toMatchInlineSnapshot(`
+      {
+        "children": [
+          {
+            "lang": "js",
+            "meta": "metastring",
+            "type": "code",
+            "value": "console.log('hello world');",
+          },
+        ],
+        "type": "root",
+      }
+    `);
+  });
+
   it("parse with mdx option accepts options parameter", () => {
     const ast = parse("# Hello {expression}", {
       mdx: true,
@@ -480,7 +497,7 @@ Paragraph with **bold** text.
 - List item 1
 - List item 2
 
-\`\`\`javascript
+\`\`\`javascript metastring
 const code = "block";
 \`\`\``;
 
@@ -558,7 +575,7 @@ const code = "block";
             "end": {
               "column": 4,
               "line": 12,
-              "offset": 129,
+              "offset": 140,
             },
             "start": {
               "column": 1,
@@ -566,7 +583,7 @@ const code = "block";
               "offset": 90,
             },
           },
-          "raw": "\`\`\`javascript
+          "raw": "\`\`\`javascript metastring
       const code = "block";
       \`\`\`",
           "type": "code",
