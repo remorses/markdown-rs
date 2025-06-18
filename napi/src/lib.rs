@@ -7,6 +7,8 @@ use serde_json::Value;
 pub struct ParseOptions {
     /// Whether to parse as MDX
     pub mdx: Option<bool>,
+    /// Whether to enable GitHub Flavored Markdown (GFM) constructs
+    pub gfm: Option<bool>,
     /// Whether to support GFM strikethrough with a single tilde
     pub gfm_strikethrough_single_tilde: Option<bool>,
     /// Whether to support math (text) with a single dollar
@@ -36,7 +38,17 @@ impl ParseOptions {
         } else {
             markdown::Constructs::default()
         };
-        
+
+        // Enable GFM constructs if requested
+        if self.gfm.unwrap_or(false) {
+            constructs.gfm_autolink_literal = true;
+            constructs.gfm_label_start_footnote = true;
+            constructs.gfm_footnote_definition = true;
+            constructs.gfm_strikethrough = true;
+            constructs.gfm_table = true;
+            constructs.gfm_task_list_item = true;
+        }
+
         // Enable frontmatter if requested
         if self.frontmatter.unwrap_or(false) {
             constructs.frontmatter = true;

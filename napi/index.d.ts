@@ -5,6 +5,8 @@ export declare function parse(input: string, options?: ParseOptions | undefined 
 export interface ParseOptions {
   /** Whether to parse as MDX */
   mdx?: boolean
+  /** Whether to enable GitHub Flavored Markdown (GFM) constructs */
+  gfm?: boolean
   /** Whether to support GFM strikethrough with a single tilde */
   gfmStrikethroughSingleTilde?: boolean
   /** Whether to support math (text) with a single dollar */

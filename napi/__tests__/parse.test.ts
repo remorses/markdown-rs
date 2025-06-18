@@ -25,6 +25,105 @@ describe("parse", () => {
     `);
   });
 
+  it("parse parses tables with gfm option", () => {
+    const ast = parse(
+      `
+      | Name  | Age        |
+      |-------|------------|
+      | Alice | <div />    |
+      | Bob   | 23         |
+      `,
+      { gfm: true, mdx: true },
+    );
+    expect(stripPositions(ast)).toMatchInlineSnapshot(`
+      {
+        "children": [
+          {
+            "align": [
+              null,
+              null,
+            ],
+            "children": [
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "type": "text",
+                        "value": "Name",
+                      },
+                    ],
+                    "type": "tableCell",
+                  },
+                  {
+                    "children": [
+                      {
+                        "type": "text",
+                        "value": "Age",
+                      },
+                    ],
+                    "type": "tableCell",
+                  },
+                ],
+                "type": "tableRow",
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "type": "text",
+                        "value": "Alice",
+                      },
+                    ],
+                    "type": "tableCell",
+                  },
+                  {
+                    "children": [
+                      {
+                        "attributes": [],
+                        "children": [],
+                        "name": "div",
+                        "type": "mdxJsxTextElement",
+                      },
+                    ],
+                    "type": "tableCell",
+                  },
+                ],
+                "type": "tableRow",
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "type": "text",
+                        "value": "Bob",
+                      },
+                    ],
+                    "type": "tableCell",
+                  },
+                  {
+                    "children": [
+                      {
+                        "type": "text",
+                        "value": "23",
+                      },
+                    ],
+                    "type": "tableCell",
+                  },
+                ],
+                "type": "tableRow",
+              },
+            ],
+            "type": "table",
+          },
+        ],
+        "type": "root",
+      }
+    `);
+  });
+
   it("parse handles level 2 heading", () => {
     const ast = parse("## My Subheading");
     expect(stripPositions(ast)).toMatchInlineSnapshot(`
