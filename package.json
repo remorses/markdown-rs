@@ -17,7 +17,6 @@
     "webcontainer-fallback.js"
   ],
   "napi": {
-    "binaryName": "markdown-rs",
     "packageName": "@xmorse/markdown-rs-binding",
     "targets": [
       "x86_64-apple-darwin",
