@@ -47,6 +47,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          # TODO add in package.json "x86_64-pc-windows-msvc","aarch64-pc-windows-msvc",
           # - os: windows-latest
           #   target: x86_64-pc-windows-msvc
           #   build: |
