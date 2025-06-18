@@ -23,6 +23,20 @@ this is a callout
       &lt;/Callout&gt;"
     `);
   });
+
+  it("handles broken jsx in mdx without panic", () => {
+    const error = catchErrorValue(() =>
+      parseMdx(`
+paragraph
+
+<Callout type="info">
+
+    `),
+    );
+    expect(error).toMatchInlineSnapshot(
+      `[Error: Message { place: Some(Point(6:5 (39))), reason: "Expected a closing tag for \`<Callout>\` (4:1)", rule_id: "end-tag-mismatch", source: "markdown-rs" }]`,
+    );
+  });
   it("returns mdast", () => {
     const ast = parseMdx(`
 import something from 'package'
@@ -32,9 +46,11 @@ export const x = 9
 
 this is a paragraph
 
-here is some mdx
+here is some mdx {expression}
 
-<Callout>
+> quote
+
+<Callout type="info">
 this is a callout
 
 </Callout>
@@ -75,13 +91,43 @@ this is a callout
             "children": [
               {
                 "type": "text",
-                "value": "here is some mdx",
+                "value": "here is some mdx ",
+              },
+              {
+                "_markdownRsStops": [
+                  [
+                    0,
+                    101,
+                  ],
+                ],
+                "type": "mdxTextExpression",
+                "value": "expression",
               },
             ],
             "type": "paragraph",
           },
           {
-            "attributes": [],
+            "children": [
+              {
+                "children": [
+                  {
+                    "type": "text",
+                    "value": "quote",
+                  },
+                ],
+                "type": "paragraph",
+              },
+            ],
+            "type": "blockquote",
+          },
+          {
+            "attributes": [
+              {
+                "name": "type",
+                "type": "mdxJsxAttribute",
+                "value": "info",
+              },
+            ],
             "children": [
               {
                 "children": [
@@ -122,4 +168,17 @@ export function stripPositions<T extends Record<string, any>>(node: T): T {
     return newNode;
   }
   return node;
+}
+
+/**
+ * Executes a function and returns either its value or the error thrown.
+ * @param fn - The function to execute.
+ * @returns The returned value, or the caught error.
+ */
+export function catchErrorValue<T>(fn: () => T): T | Error {
+  try {
+    return fn();
+  } catch (e) {
+    return e;
+  }
 }
