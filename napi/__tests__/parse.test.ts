@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { parse, parseMdx, toHtml } from "../";
+import { describe, expect, it } from "vitest";
+import { parse, parseMdx } from "../";
 
 describe("parse mdx", () => {
   it("parse accepts options parameter", () => {
@@ -194,33 +194,39 @@ describe("parse mdx", () => {
   });
 
   it("mdx options work in parseMdx", () => {
-    const ast = parseMdx("import foo from 'bar'\n{expression}", {
+    const ast = parseMdx("import foo from 'bar'\n\n{expression}", {
       mdxEsmParse: true,
       mdxExpressionParse: true,
     });
-    expect(ast).toBeDefined();
-  });
-  it("returns html", () => {
-    const html = toHtml(`
-# Hello
-
-this is a paragraph
-
-here is some mdx
-
-<Callout>
-this is a callout
-
-</Callout>`);
-    expect(html).toMatchInlineSnapshot(`
-      "<h1>Hello</h1>
-      <p>this is a paragraph</p>
-      <p>here is some mdx</p>
-      &lt;Callout&gt;
-      this is a callout
-      &lt;/Callout&gt;"
+    expect(stripPositions(ast)).toMatchInlineSnapshot(`
+      {
+        "children": [
+          {
+            "_markdownRsStops": [
+              [
+                0,
+                0,
+              ],
+            ],
+            "type": "mdxjsEsm",
+            "value": "import foo from 'bar'",
+          },
+          {
+            "_markdownRsStops": [
+              [
+                0,
+                24,
+              ],
+            ],
+            "type": "mdxFlowExpression",
+            "value": "expression",
+          },
+        ],
+        "type": "root",
+      }
     `);
   });
+
 
   it("handles broken jsx in mdx without panic", () => {
     const error = catchErrorValue(() =>

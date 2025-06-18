@@ -73,8 +73,8 @@ pub fn parse_mdx(mdx: String, options: Option<ParseOptions>) -> Result<Value> {
     serde_json::to_value(&ast).map_err(|e| Error::from_reason(e.to_string()))
 }
 
-#[napi]
-pub fn to_html(mdx: String) -> Value {
-    let html = markdown::to_html(&mdx);
-    html.into()
-}
+// #[napi]
+// pub fn to_html(mdx: String) -> Value {
+//     let html = markdown::to_html(&mdx);
+//     html.into()
+// }
