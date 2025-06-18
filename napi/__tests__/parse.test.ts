@@ -722,7 +722,10 @@ tags:
 
 Content goes here.
 `;
-    const sections = splitIntoSections(content, { mdx: true,  });
+    const sections = splitIntoSections(content, {
+      mdx: true,
+      frontmatter: true,
+    });
 
     expect(sections[0].type).toBe("yaml");
     expect(sections[0].raw).toBe(`---

@@ -1,6 +1,6 @@
 {
   "name": "@xmorse/markdown-rs",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "scripts": {
     "build:debug": "pnpm napi build --platform --manifest-path Cargo.toml",
     "test": "pnpm vitest",
@@ -10,6 +10,7 @@
   "publishConfig": {
     "access": "public"
   },
+  "repository": "https://github.com/remorses/markdown-rs",
   "napi": {
     "binaryName": "markdown-rs",
     "packageName": "@xmorse/markdown-rs-binding",

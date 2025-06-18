@@ -15,6 +15,8 @@ pub struct ParseOptions {
     pub mdx_expression_parse: Option<bool>,
     /// Whether to enable basic MDX ESM parsing
     pub mdx_esm_parse: Option<bool>,
+    /// Whether to support frontmatter
+    pub frontmatter: Option<bool>,
 }
 
 #[napi(object)]
@@ -29,7 +31,19 @@ pub struct Section {
 
 impl ParseOptions {
     fn to_rust_parse_options(&self) -> markdown::ParseOptions {
+        let mut constructs = if self.mdx.unwrap_or(false) {
+            markdown::Constructs::mdx()
+        } else {
+            markdown::Constructs::default()
+        };
+        
+        // Enable frontmatter if requested
+        if self.frontmatter.unwrap_or(false) {
+            constructs.frontmatter = true;
+        }
+
         markdown::ParseOptions {
+            constructs,
             gfm_strikethrough_single_tilde: self.gfm_strikethrough_single_tilde.unwrap_or(true),
             math_text_single_dollar: self.math_text_single_dollar.unwrap_or(true),
             mdx_expression_parse: if self.mdx_expression_parse.unwrap_or(false) {
@@ -55,28 +69,10 @@ impl ParseOptions {
 
 #[napi]
 pub fn parse(input: String, options: Option<ParseOptions>) -> Result<Value> {
-    let mut parse_options = match &options {
-        Some(opts) => {
-            if opts.mdx.unwrap_or(false) {
-                markdown::ParseOptions {
-                    constructs: markdown::Constructs::mdx(),
-                    ..Default::default()
-                }
-            } else {
-                markdown::ParseOptions::default()
-            }
-        }
+    let parse_options = match options {
+        Some(opts) => opts.to_rust_parse_options(),
         None => markdown::ParseOptions::default(),
     };
-
-    // Override with user-provided options if available
-    if let Some(opts) = options {
-        let user_options = opts.to_rust_parse_options();
-        parse_options.gfm_strikethrough_single_tilde = user_options.gfm_strikethrough_single_tilde;
-        parse_options.math_text_single_dollar = user_options.math_text_single_dollar;
-        parse_options.mdx_expression_parse = user_options.mdx_expression_parse;
-        parse_options.mdx_esm_parse = user_options.mdx_esm_parse;
-    }
 
     let tree = markdown::to_mdast(&input, &parse_options)
         .map_err(|e| Error::from_reason(format!("{:?}", e)))?;
@@ -85,28 +81,10 @@ pub fn parse(input: String, options: Option<ParseOptions>) -> Result<Value> {
 
 #[napi]
 pub fn split_into_sections(input: String, options: Option<ParseOptions>) -> Result<Vec<Section>> {
-    let mut parse_options = match &options {
-        Some(opts) => {
-            if opts.mdx.unwrap_or(false) {
-                markdown::ParseOptions {
-                    constructs: markdown::Constructs::mdx(),
-                    ..Default::default()
-                }
-            } else {
-                markdown::ParseOptions::default()
-            }
-        }
+    let parse_options = match options {
+        Some(opts) => opts.to_rust_parse_options(),
         None => markdown::ParseOptions::default(),
     };
-
-    // Override with user-provided options if available
-    if let Some(opts) = options {
-        let user_options = opts.to_rust_parse_options();
-        parse_options.gfm_strikethrough_single_tilde = user_options.gfm_strikethrough_single_tilde;
-        parse_options.math_text_single_dollar = user_options.math_text_single_dollar;
-        parse_options.mdx_expression_parse = user_options.mdx_expression_parse;
-        parse_options.mdx_esm_parse = user_options.mdx_esm_parse;
-    }
 
     let tree = markdown::to_mdast(&input, &parse_options)
         .map_err(|e| Error::from_reason(format!("{:?}", e)))?;

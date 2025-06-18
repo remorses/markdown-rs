@@ -13,6 +13,8 @@ export interface ParseOptions {
   mdxExpressionParse?: boolean
   /** Whether to enable basic MDX ESM parsing */
   mdxEsmParse?: boolean
+  /** Whether to support frontmatter */
+  frontmatter?: boolean
 }
 
 export interface Section {
