@@ -55,3 +55,4 @@ const {
 })
 export default __napiModule.exports
 export const parse = __napiModule.exports.parse
+export const splitIntoSections = __napiModule.exports.splitIntoSections

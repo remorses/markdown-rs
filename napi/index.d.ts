@@ -14,3 +14,14 @@ export interface ParseOptions {
   /** Whether to enable basic MDX ESM parsing */
   mdxEsmParse?: boolean
 }
+
+export interface Section {
+  /** Raw text content of the section */
+  raw: string
+  /** Type of the section (e.g., "heading", "paragraph", etc.) */
+  type: string
+  /** Position information */
+  position?: any
+}
+
+export declare function splitIntoSections(input: string, options?: ParseOptions | undefined | null): Array<Section>

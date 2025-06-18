@@ -86,3 +86,4 @@ const { instance: __napiInstance, module: __wasiModule, napiModule: __napiModule
 })
 module.exports = __napiModule.exports
 module.exports.parse = __napiModule.exports.parse
+module.exports.splitIntoSections = __napiModule.exports.splitIntoSections

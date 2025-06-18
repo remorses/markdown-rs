@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parse } from "../";
+import { parse, splitIntoSections } from "../";
 
 describe("parse", () => {
   it("parse accepts options parameter", () => {
@@ -229,7 +229,6 @@ describe("parse", () => {
     `);
   });
 
-
   it("handles broken jsx in mdx without panic", () => {
     const error = catchErrorValue(() =>
       parse(`
@@ -243,6 +242,7 @@ paragraph
       `[Error: Message { place: Some(Point(6:5 (39))), reason: "Expected a closing tag for \`<Callout>\` (4:1)", rule_id: "end-tag-mismatch", source: "markdown-rs" }]`,
     );
   });
+
   it("returns mdast", () => {
     const ast = parse(`
 import something from 'package'
@@ -352,6 +352,371 @@ this is a callout
         "type": "root",
       }
     `);
+  });
+});
+
+describe("split_into_sections", () => {
+  it("splits basic markdown into sections", () => {
+    const sections = splitIntoSections(`# Hello World
+
+This is a paragraph.
+
+## Subheading
+
+Another paragraph.`);
+    
+    expect(sections).toMatchInlineSnapshot(`
+      [
+        {
+          "position": {
+            "end": {
+              "column": 14,
+              "line": 1,
+              "offset": 13,
+            },
+            "start": {
+              "column": 1,
+              "line": 1,
+              "offset": 0,
+            },
+          },
+          "raw": "# Hello World",
+          "type": "heading",
+        },
+        {
+          "position": {
+            "end": {
+              "column": 21,
+              "line": 3,
+              "offset": 35,
+            },
+            "start": {
+              "column": 1,
+              "line": 3,
+              "offset": 15,
+            },
+          },
+          "raw": "This is a paragraph.",
+          "type": "paragraph",
+        },
+        {
+          "position": {
+            "end": {
+              "column": 14,
+              "line": 5,
+              "offset": 50,
+            },
+            "start": {
+              "column": 1,
+              "line": 5,
+              "offset": 37,
+            },
+          },
+          "raw": "## Subheading",
+          "type": "heading",
+        },
+        {
+          "position": {
+            "end": {
+              "column": 19,
+              "line": 7,
+              "offset": 70,
+            },
+            "start": {
+              "column": 1,
+              "line": 7,
+              "offset": 52,
+            },
+          },
+          "raw": "Another paragraph.",
+          "type": "paragraph",
+        },
+      ]
+    `);
+  });
+
+  it("handles empty content", () => {
+    const sections = splitIntoSections("");
+    expect(sections).toMatchInlineSnapshot(`[]`);
+  });
+
+  it("works with single element", () => {
+    const sections = splitIntoSections("# Single Heading");
+    expect(sections).toMatchInlineSnapshot(`
+      [
+        {
+          "position": {
+            "end": {
+              "column": 17,
+              "line": 1,
+              "offset": 16,
+            },
+            "start": {
+              "column": 1,
+              "line": 1,
+              "offset": 0,
+            },
+          },
+          "raw": "# Single Heading",
+          "type": "heading",
+        },
+      ]
+    `);
+  });
+
+  it("works with different markdown elements", () => {
+    const content = `# Heading
+
+Paragraph with **bold** text.
+
+> Blockquote here
+
+- List item 1
+- List item 2
+
+\`\`\`javascript
+const code = "block";
+\`\`\``;
+
+    const sections = splitIntoSections(content);
+    expect(sections).toMatchInlineSnapshot(`
+      [
+        {
+          "position": {
+            "end": {
+              "column": 10,
+              "line": 1,
+              "offset": 9,
+            },
+            "start": {
+              "column": 1,
+              "line": 1,
+              "offset": 0,
+            },
+          },
+          "raw": "# Heading",
+          "type": "heading",
+        },
+        {
+          "position": {
+            "end": {
+              "column": 30,
+              "line": 3,
+              "offset": 40,
+            },
+            "start": {
+              "column": 1,
+              "line": 3,
+              "offset": 11,
+            },
+          },
+          "raw": "Paragraph with **bold** text.",
+          "type": "paragraph",
+        },
+        {
+          "position": {
+            "end": {
+              "column": 18,
+              "line": 5,
+              "offset": 59,
+            },
+            "start": {
+              "column": 1,
+              "line": 5,
+              "offset": 42,
+            },
+          },
+          "raw": "> Blockquote here",
+          "type": "blockquote",
+        },
+        {
+          "position": {
+            "end": {
+              "column": 1,
+              "line": 9,
+              "offset": 89,
+            },
+            "start": {
+              "column": 1,
+              "line": 7,
+              "offset": 61,
+            },
+          },
+          "raw": "- List item 1
+      - List item 2
+      ",
+          "type": "list",
+        },
+        {
+          "position": {
+            "end": {
+              "column": 4,
+              "line": 12,
+              "offset": 129,
+            },
+            "start": {
+              "column": 1,
+              "line": 10,
+              "offset": 90,
+            },
+          },
+          "raw": "\`\`\`javascript
+      const code = "block";
+      \`\`\`",
+          "type": "code",
+        },
+      ]
+    `);
+  });
+
+  it("works with MDX content", () => {
+    const sections = splitIntoSections(`import React from 'react'
+
+# MDX Document
+
+<Component prop="value">
+  Content
+</Component>`, { mdx: true });
+    
+    expect(sections).toMatchInlineSnapshot(`
+      [
+        {
+          "position": {
+            "end": {
+              "column": 26,
+              "line": 1,
+              "offset": 25,
+            },
+            "start": {
+              "column": 1,
+              "line": 1,
+              "offset": 0,
+            },
+          },
+          "raw": "import React from 'react'",
+          "type": "paragraph",
+        },
+        {
+          "position": {
+            "end": {
+              "column": 15,
+              "line": 3,
+              "offset": 41,
+            },
+            "start": {
+              "column": 1,
+              "line": 3,
+              "offset": 27,
+            },
+          },
+          "raw": "# MDX Document",
+          "type": "heading",
+        },
+        {
+          "position": {
+            "end": {
+              "column": 13,
+              "line": 7,
+              "offset": 90,
+            },
+            "start": {
+              "column": 1,
+              "line": 5,
+              "offset": 43,
+            },
+          },
+          "raw": "<Component prop="value">
+        Content
+      </Component>",
+          "type": "mdxJsxFlowElement",
+        },
+      ]
+    `);
+  });
+
+  it("works with MDX and expression parsing enabled", () => {
+    const sections = splitIntoSections(`# Hello {world}
+
+{expression}
+
+<Component />`, {
+      mdx: true,
+      mdxExpressionParse: true
+    });
+    
+    expect(sections).toMatchInlineSnapshot(`
+      [
+        {
+          "position": {
+            "end": {
+              "column": 16,
+              "line": 1,
+              "offset": 15,
+            },
+            "start": {
+              "column": 1,
+              "line": 1,
+              "offset": 0,
+            },
+          },
+          "raw": "# Hello {world}",
+          "type": "heading",
+        },
+        {
+          "position": {
+            "end": {
+              "column": 13,
+              "line": 3,
+              "offset": 29,
+            },
+            "start": {
+              "column": 1,
+              "line": 3,
+              "offset": 17,
+            },
+          },
+          "raw": "{expression}",
+          "type": "mdxFlowExpression",
+        },
+        {
+          "position": {
+            "end": {
+              "column": 14,
+              "line": 5,
+              "offset": 44,
+            },
+            "start": {
+              "column": 1,
+              "line": 5,
+              "offset": 31,
+            },
+          },
+          "raw": "<Component />",
+          "type": "mdxJsxFlowElement",
+        },
+      ]
+    `);
+  });
+
+  it("preserves exact raw text with complex formatting", () => {
+    const content = "# Title\n\nParagraph with *emphasis* and `code`.";
+    const sections = splitIntoSections(content);
+    
+    expect(sections[0].raw).toBe("# Title");
+    expect(sections[1].raw).toBe("Paragraph with *emphasis* and `code`.");
+    expect(sections[0].type).toBe("heading");
+    expect(sections[1].type).toBe("paragraph");
+  });
+
+  it("accepts parse options", () => {
+    const sections = splitIntoSections("# Title\n\nSome content", {
+      gfmStrikethroughSingleTilde: false,
+      mathTextSingleDollar: true
+    });
+    
+    expect(sections).toHaveLength(2);
+    expect(sections[0].type).toBe("heading");
+    expect(sections[1].type).toBe("paragraph");
   });
 });
 
