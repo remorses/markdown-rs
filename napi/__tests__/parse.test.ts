@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { parse, parseMdx } from "../out/index.wasi.cjs";
+import { parse, parseMdx } from "../";
 
 describe("parse mdx", () => {
   it("returns mdast", () => {
@@ -119,23 +119,43 @@ this is a callout
             "type": "paragraph",
           },
           {
-            "position": {
-              "end": {
-                "column": 18,
-                "line": 9,
-                "offset": 76,
+            "attributes": [],
+            "children": [
+              {
+                "children": [
+                  {
+                    "position": {
+                      "end": {
+                        "column": 18,
+                        "line": 9,
+                        "offset": 76,
+                      },
+                      "start": {
+                        "column": 1,
+                        "line": 9,
+                        "offset": 59,
+                      },
+                    },
+                    "type": "text",
+                    "value": "this is a callout",
+                  },
+                ],
+                "position": {
+                  "end": {
+                    "column": 18,
+                    "line": 9,
+                    "offset": 76,
+                  },
+                  "start": {
+                    "column": 1,
+                    "line": 9,
+                    "offset": 59,
+                  },
+                },
+                "type": "paragraph",
               },
-              "start": {
-                "column": 1,
-                "line": 8,
-                "offset": 49,
-              },
-            },
-            "type": "html",
-            "value": "<Callout>
-      this is a callout",
-          },
-          {
+            ],
+            "name": "Callout",
             "position": {
               "end": {
                 "column": 11,
@@ -144,12 +164,11 @@ this is a callout
               },
               "start": {
                 "column": 1,
-                "line": 11,
-                "offset": 78,
+                "line": 8,
+                "offset": 49,
               },
             },
-            "type": "html",
-            "value": "</Callout>",
+            "type": "mdxJsxFlowElement",
           },
         ],
         "position": {
