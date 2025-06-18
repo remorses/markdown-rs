@@ -1,0 +1,53 @@
+{
+  "name": "@xmorse/markdown-rs",
+  "version": "0.0.0",
+  "scripts": {
+    "build:debug": "napi build --platform --manifest-path napi/Cargo.toml",
+    "build": "pnpm run build:debug --release",
+    "npm-dirs": "pnpm napi create-npm-dirs --package-json-path package.json",
+    "pre-publish": "pnpm napi pre-publish --no-gh-release --tagstyle npm --package-json-path package.json --npm-dir npm && cp package.json napi/package.json && cp README.md napi/README.md",
+    "artifacts": "pnpm napi artifacts --npm-dir npm --build-output-dir napi"
+  },
+  "napi": {
+    "binaryName": "markdown-rs",
+    "packageName": "@xmorse/markdown-rs-binding",
+    "targets": [
+      "x86_64-apple-darwin",
+      "x86_64-pc-windows-msvc",
+      "x86_64-unknown-linux-gnu",
+      "x86_64-unknown-linux-musl",
+      "x86_64-unknown-freebsd",
+      "i686-pc-windows-msvc",
+      "armv7-unknown-linux-gnueabihf",
+      "aarch64-unknown-linux-gnu",
+      "aarch64-apple-darwin",
+      "aarch64-unknown-linux-musl",
+      "aarch64-pc-windows-msvc",
+      "wasm32-wasip1-threads"
+    ],
+    "wasm": {
+      "initialMemory": 16384
+    }
+  },
+  "devDependencies": {
+    "@emnapi/runtime": "^1.4.3",
+    "@napi-rs/wasm-runtime": "^0.2.7",
+    "@napi-rs/cli": "3.0.0-alpha.89",
+    "emnapi": "^1.4.3",
+    "vitest": "^1.5.0"
+  },
+  "optionalDependencies": {
+    "@xmorse/markdown-rs-binding-darwin-x64": "0.0.0",
+    "@xmorse/markdown-rs-binding-win32-x64-msvc": "0.0.0",
+    "@xmorse/markdown-rs-binding-linux-x64-gnu": "0.0.0",
+    "@xmorse/markdown-rs-binding-linux-x64-musl": "0.0.0",
+    "@xmorse/markdown-rs-binding-freebsd-x64": "0.0.0",
+    "@xmorse/markdown-rs-binding-win32-ia32-msvc": "0.0.0",
+    "@xmorse/markdown-rs-binding-linux-arm-gnueabihf": "0.0.0",
+    "@xmorse/markdown-rs-binding-linux-arm64-gnu": "0.0.0",
+    "@xmorse/markdown-rs-binding-darwin-arm64": "0.0.0",
+    "@xmorse/markdown-rs-binding-linux-arm64-musl": "0.0.0",
+    "@xmorse/markdown-rs-binding-win32-arm64-msvc": "0.0.0",
+    "@xmorse/markdown-rs-binding-wasm32-wasi": "0.0.0"
+  }
+}
