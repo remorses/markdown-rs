@@ -1,0 +1,15 @@
+[package]
+name = "markdown-napi"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+napi = { version = "2", features = ["napi4", "serde-json"] }
+napi-derive = "2"
+markdown = { path = "..", package = "markdown", version = "1.0.0", features = ["serde"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
