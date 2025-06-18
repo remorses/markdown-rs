@@ -2,7 +2,9 @@
   "name": "markdown-napi",
   "version": "0.1.0",
   "scripts": {
-    "build": "napi build --platform",
+    "build": "pnpm run build:platform && pnpm run build:wasm",
+    "build:wasm": "napi build --release --target wasm32-wasip1-threads --no-const-enum",
+    "build:platform": "napi build --platform --release --no-const-enum",
     "test": "vitest run"
   },
   "devDependencies": {
