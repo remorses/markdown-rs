@@ -11,6 +11,12 @@
     "access": "public"
   },
   "repository": "https://github.com/remorses/markdown-rs",
+  "files": [
+    "index.d.ts",
+    "index.js",
+    "browser.js",
+    "webcontainer-fallback.js"
+  ],
   "napi": {
     "binaryName": "markdown-rs",
     "packageName": "@xmorse/markdown-rs-binding",
