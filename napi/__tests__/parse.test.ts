@@ -2,6 +2,204 @@ import { describe, it, expect } from "vitest";
 import { parse, parseMdx, toHtml } from "../";
 
 describe("parse mdx", () => {
+  it("parse accepts options parameter", () => {
+    const ast = parse("# Hello ~world~", {
+      gfmStrikethroughSingleTilde: true,
+    });
+    expect(stripPositions(ast)).toMatchInlineSnapshot(`
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "type": "text",
+                "value": "Hello ~world~",
+              },
+            ],
+            "depth": 1,
+            "type": "heading",
+          },
+        ],
+        "type": "root",
+      }
+    `);
+  });
+
+  it("parse_mdx accepts options parameter", () => {
+    const ast = parseMdx("# Hello {expression}", {
+      mdxExpressionParse: true,
+      gfmStrikethroughSingleTilde: false,
+    });
+    expect(stripPositions(ast)).toMatchInlineSnapshot(`
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "type": "text",
+                "value": "Hello ",
+              },
+              {
+                "_markdownRsStops": [
+                  [
+                    0,
+                    9,
+                  ],
+                ],
+                "type": "mdxTextExpression",
+                "value": "expression",
+              },
+            ],
+            "depth": 1,
+            "type": "heading",
+          },
+        ],
+        "type": "root",
+      }
+    `);
+  });
+
+  it("parse works without options parameter", () => {
+    const ast = parse("# Hello world");
+    expect(stripPositions(ast)).toMatchInlineSnapshot(`
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "type": "text",
+                "value": "Hello world",
+              },
+            ],
+            "depth": 1,
+            "type": "heading",
+          },
+        ],
+        "type": "root",
+      }
+    `);
+  });
+
+  it("parse_mdx works without options parameter", () => {
+    const ast = parseMdx("# Hello {expression}");
+    expect(stripPositions(ast)).toMatchInlineSnapshot(`
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "type": "text",
+                "value": "Hello ",
+              },
+              {
+                "_markdownRsStops": [
+                  [
+                    0,
+                    9,
+                  ],
+                ],
+                "type": "mdxTextExpression",
+                "value": "expression",
+              },
+            ],
+            "depth": 1,
+            "type": "heading",
+          },
+        ],
+        "type": "root",
+      }
+    `);
+  });
+
+  it("options affect math parsing behavior", () => {
+    const astWithSingleDollar = parse("$math$", {
+      mathTextSingleDollar: true,
+    });
+    const astWithoutSingleDollar = parse("$math$", {
+      mathTextSingleDollar: false,
+    });
+    expect(stripPositions(astWithSingleDollar)).toMatchInlineSnapshot(`
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "type": "text",
+                "value": "$math$",
+              },
+            ],
+            "type": "paragraph",
+          },
+        ],
+        "type": "root",
+      }
+    `);
+    expect(stripPositions(astWithoutSingleDollar)).toMatchInlineSnapshot(`
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "type": "text",
+                "value": "$math$",
+              },
+            ],
+            "type": "paragraph",
+          },
+        ],
+        "type": "root",
+      }
+    `);
+  });
+
+  it("options affect strikethrough parsing", () => {
+    const astWithSingleTilde = parse("~strikethrough~", {
+      gfmStrikethroughSingleTilde: true,
+    });
+    const astWithoutSingleTilde = parse("~strikethrough~", {
+      gfmStrikethroughSingleTilde: false,
+    });
+    expect(stripPositions(astWithSingleTilde)).toMatchInlineSnapshot(`
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "type": "text",
+                "value": "~strikethrough~",
+              },
+            ],
+            "type": "paragraph",
+          },
+        ],
+        "type": "root",
+      }
+    `);
+    expect(stripPositions(astWithoutSingleTilde)).toMatchInlineSnapshot(`
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "type": "text",
+                "value": "~strikethrough~",
+              },
+            ],
+            "type": "paragraph",
+          },
+        ],
+        "type": "root",
+      }
+    `);
+  });
+
+  it("mdx options work in parseMdx", () => {
+    const ast = parseMdx("import foo from 'bar'\n{expression}", {
+      mdxEsmParse: true,
+      mdxExpressionParse: true,
+    });
+    expect(ast).toBeDefined();
+  });
   it("returns html", () => {
     const html = toHtml(`
 # Hello
