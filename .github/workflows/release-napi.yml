@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - package.json
+      - napi/package.json # make new release on version change of napi package
     # TODO enable the release napi workflow only on main
     # branches:
     #   - main
