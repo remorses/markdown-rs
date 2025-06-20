@@ -1,9 +1,5 @@
 {
   "name": "root",
-  "scripts": {
-    "build:debug": "pnpm napi build --platform --manifest-path napi/Cargo.toml",
-    "build": "pnpm run build:debug --release"
-  },
   "dependencies": {
     "@napi-rs/cli": "3.0.0-alpha.89"
   },
