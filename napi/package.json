@@ -1,7 +1,7 @@
 {
   "name": "@xmorse/markdown-rs",
   "description": "Fast markdown and mdx parser written in Rust",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "index.js",
   "browser": "browser.js",
   "scripts": {
