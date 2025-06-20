@@ -33,7 +33,7 @@ jobs:
         with:
           static-checking: localIsNew
           file-url: https://unpkg.com/@xmorse/markdown-rs@latest/package.json
-          file-name: package.json
+          file-name: napi/package.json
 
       - name: Set version name
         if: steps.version.outputs.changed == 'true'
