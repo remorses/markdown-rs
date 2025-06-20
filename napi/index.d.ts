@@ -18,5 +18,3 @@ export interface ParseOptions {
   /** Whether to support frontmatter */
   frontmatter?: boolean
 }
-
-export declare function splitIntoSections(input: string, options?: ParseOptions | undefined | null): Array<any>

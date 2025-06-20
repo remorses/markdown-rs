@@ -83,34 +83,6 @@ pub fn parse(input: String, options: Option<ParseOptions>) -> Result<Value> {
     serde_json::to_value(&tree).map_err(|e| Error::from_reason(e.to_string()))
 }
 
-#[napi]
-pub fn split_into_sections(input: String, options: Option<ParseOptions>) -> Result<Vec<Value>> {
-    let parse_options = match options {
-        Some(opts) => opts.to_rust_parse_options(),
-        None => markdown::ParseOptions::default(),
-    };
-
-    let tree = markdown::to_mdast(&input, &parse_options)
-        .map_err(|e| Error::from_reason(format!("{:?}", e)))?;
-
-    // Convert AST to JSON to extract children
-    let ast_value = serde_json::to_value(&tree).map_err(|e| Error::from_reason(e.to_string()))?;
-
-    let mut sections = Vec::new();
-
-    if let Some(children) = ast_value.get("children").and_then(|c| c.as_array()) {
-        for child in children {
-            let mut node = child.clone();
-            // Remove children field if it exists
-            if let Some(obj) = node.as_object_mut() {
-                obj.remove("children");
-            }
-            sections.push(node);
-        }
-    }
-
-    Ok(sections)
-}
 
 // #[napi]
 // pub fn to_html(mdx: String) -> Value {

@@ -1,5 +1,5 @@
 import { bench, describe } from "vitest";
-import { parse, splitIntoSections } from "../";
+import { parse } from "../";
 import { remark } from "remark";
 import remarkMdx from "remark-mdx";
 
@@ -269,14 +269,6 @@ describe("MDX Parsing Performance Comparison", () => {
       mdxEsmParse: true,
     });
     console.log(res);
-  });
-
-  bench("markdown-rs splitIntoSections", () => {
-    splitIntoSections(longMdxContent, {
-      mdx: true,
-      mdxExpressionParse: true,
-      mdxEsmParse: true,
-    });
   });
 
   bench("remark + remark-mdx parse", () => {
