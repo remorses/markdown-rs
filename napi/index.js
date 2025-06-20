@@ -377,3 +377,4 @@ if (!nativeBinding) {
 
 module.exports = nativeBinding
 module.exports.parse = nativeBinding.parse
+module.exports.toHtml = nativeBinding.toHtml
