@@ -168,7 +168,8 @@ jobs:
 
       - run: pnpm napi create-npm-dirs --package-json-path napi/package.json
 
-      - run: pnpm napi artifacts --package-json-path napi/package.json --npm-dir npm --build-output-dir napi
+      - run: pnpm napi artifacts --package-json-path package.json --npm-dir ../npm --build-output-dir .
+        working-directory: napi
 
       - name: Publish npm packages as latest
         env:
